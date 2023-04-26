@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const path = require("path");
+const { getAll, save } = require('./db');
 
 const app = express();
 
@@ -15,8 +16,21 @@ const glossary = [
   { word: 'vapid', definition: 'lacking significance or liveliness.' },
 ];
 
-app.get('/getWords', (req, res) => {
-  res.send(glossary);
+app.post('/words', (req, res) => {
+  console.log(req.body);
+  // save(req.body)
+  res.sendStatus(201);
+});
+
+app.get('/words', (req, res) => {
+  getAll()
+    .then((wordData) => {
+      console.log('successfully retrieved words: ', wordData);
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      console.log('there was an error getting words: ', err);
+    })
 });
 
 app.listen(process.env.PORT);
