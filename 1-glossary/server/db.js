@@ -17,8 +17,8 @@ module.exports = {
     return Word.find({});
   },
 
-  save: (words) => {
-    return Word.insertMany(words);
+  save: (word) => {
+    return Word.create(word);
   }
 }
 

@@ -9,27 +9,39 @@ const app = express();
 app.use(express.static(path.join(__dirname, "../client/dist")));
 app.use(express.json());
 
-const glossary = [
-  { word: 'mendicant', definition: 'a pauper who lives by begging.' },
-  { word: 'meretricious', definition: 'tastelessly showy.' },
-  { word: 'vitiate', definition: 'make imperfect.' },
-  { word: 'vapid', definition: 'lacking significance or liveliness.' },
-];
+// const glossary = [
+//   { word: 'mendicant', definition: 'a pauper who lives by begging.' },
+//   { word: 'meretricious', definition: 'tastelessly showy.' },
+//   { word: 'vitiate', definition: 'make imperfect.' },
+//   { word: 'vapid', definition: 'lacking significance or liveliness.' },
+// ];
 
-app.post('/words', (req, res) => {
-  console.log(req.body);
-  // save(req.body)
-  res.sendStatus(201);
-});
+app.post('/glossary', (req, res) => {
+  save(req.body)
+    .then((wordsData)=> {
+      console.log('successfully created new word entry!: ', wordsData);
+      getAll()
+        .then((newWordsData) => {
+          res.send(newWordsData);
+        })
+        .catch((err) => {
+          console.log('error retriving words while creating new entry!: ', err);
+        })
 
-app.get('/words', (req, res) => {
-  getAll()
-    .then((wordData) => {
-      console.log('successfully retrieved words: ', wordData);
-      res.sendStatus(200);
     })
     .catch((err) => {
-      console.log('there was an error getting words: ', err);
+      console.log('there was an error creating new word entry!: ', err)
+    })
+});
+
+app.get('/glossary', (req, res) => {
+  getAll()
+    .then((wordData) => {
+      console.log('successfully retrieved words!: ', wordData);
+      res.send(wordData);
+    })
+    .catch((err) => {
+      console.log('there was an error retrieving words!: ', err);
     })
 });
 

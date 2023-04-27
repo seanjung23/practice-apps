@@ -1,12 +1,13 @@
 import React from 'react';
 
-const AddWord = () => {
+const AddWord = ({ createWord }) => {
   return (
     <div>
       <label>
         Add Word to Glossary:
-        <input placeholder='Add your new word here'/>
-        <button type='submit'>Add Word</button>
+        <input className='user-input' placeholder='Add your new word here'/>
+        <input className='user-input' placeholder='Add your definition here'/>
+        <button type='submit' onClick={() => createWord()}>Add Word</button>
       </label>
     </div>
   );
