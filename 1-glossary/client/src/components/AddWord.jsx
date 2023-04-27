@@ -5,7 +5,7 @@ const AddWord = ({ createWord }) => {
     <div>
       <label>
         Add Word to Glossary:
-        <input className='user-input' placeholder='Add your new word here'/>
+        <input className='user-input' placeholder='Add your word here'/>
         <input className='user-input' placeholder='Add your definition here'/>
         <button type='submit' onClick={() => createWord()}>Add Word</button>
       </label>

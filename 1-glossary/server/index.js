@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const path = require("path");
-const { getAll, save } = require('./db');
+const { getAll, save, remove, update, search } = require('./db');
 
 const app = express();
 
@@ -16,33 +16,73 @@ app.use(express.json());
 //   { word: 'vapid', definition: 'lacking significance or liveliness.' },
 // ];
 
-app.post('/glossary', (req, res) => {
-  save(req.body)
-    .then((wordsData)=> {
-      console.log('successfully created new word entry!: ', wordsData);
-      getAll()
-        .then((newWordsData) => {
-          res.send(newWordsData);
-        })
-        .catch((err) => {
-          console.log('error retriving words while creating new entry!: ', err);
-        })
-
+app.get('/Glossary', (req, res) => {
+  getAll()
+    .then((wordsData) => {
+      res.send(wordsData);
     })
     .catch((err) => {
-      console.log('there was an error creating new word entry!: ', err)
+      console.log('error retrieving words from database!: ', err);
     })
 });
 
-app.get('/glossary', (req, res) => {
-  getAll()
-    .then((wordData) => {
-      console.log('successfully retrieved words!: ', wordData);
-      res.send(wordData);
+app.post('/Search', (req, res) => {
+  search(req.body)
+    .then((wordsData) => {
+      console.log(wordsData);
+      res.send(wordsData);
     })
     .catch((err) => {
-      console.log('there was an error retrieving words!: ', err);
+      console.log('error searching word in database!: ', err);
     })
+});
+
+app.post('/Glossary', (req, res) => {
+  save(req.body)
+    .then(()=> {
+      getAll()
+        .then((wordsData) => {
+          res.send(wordsData);
+        })
+        .catch((err) => {
+          console.log('error retrieving words from database!: ', err);
+        })
+    })
+    .catch((err) => {
+      console.log('error creating new word entry in database!: ', err)
+    })
+});
+
+app.delete('/Glossary', (req, res) => {
+  remove(req.body)
+    .then(() => {
+      getAll()
+      .then((wordsData) => {
+        res.send(wordsData);
+      })
+      .catch((err) => {
+        console.log('error retrieving words from database!: ', err);
+      })
+    })
+    .catch((err) => {
+      console.log('error removing word entry from database!: ', err);
+    })
+});
+
+app.patch('/Glossary', (req, res) => {
+  update(req.body)
+    .then(() => {
+      getAll()
+        .then((wordsData) => {
+          res.send(wordsData);
+        })
+        .catch((err) => {
+          console.log('error retrieving words from database!: ', err);
+        })
+    })
+    .catch((err) => {
+      console.log('error updating entry in database!: ', err);
+    });
 });
 
 app.listen(process.env.PORT);
