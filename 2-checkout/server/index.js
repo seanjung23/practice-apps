@@ -31,11 +31,10 @@ app.use(express.json());
 app.post('/checkout', (req, res) => {
   let summaryData = req.body.summaryData;
   let currentSession = req.session_id;
-  console.log('this summaryData: ', summaryData);
-  console.log('this currentSession: ', typeof currentSession);
+
 // ON DUPLICATE KEY name=(however you get your)
   db.queryAsync(
-    `INSERT INTO RESPONSES (id, name, email, password, address, city, state, zipcode, phone, credit, exp, cvv, billingZipcode)
+    `INSERT INTO RESPONSES
     VALUES ('${currentSession}', '${summaryData[0][0][1]}', '${summaryData[0][1][1]}', '${summaryData[0][2][1]}', '${summaryData[1][0][1]}', '${summaryData[1][1][1]}', '${summaryData[1][2][1]}', ${summaryData[1][3][1]}, ${summaryData[1][4][1]}, ${summaryData[2][0][1]}, '${summaryData[2][1][1]}', ${summaryData[2][2][1]}, ${summaryData[2][3][1]});`
     )
     .then((dataRes) => res.send(dataRes))
